@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendu</title>
+
+    <!-- CDN -->
+    <link rel="stylesheet" href="pendu.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</head>
+<body class="bg-info">
+
+    <!-- Un header pour le plaisir -->
+    <header class="d-flex container-fluid justify-content-center align-items-center shadow p-3">
+        <div class="row">
+            <div class="col-12 text-light">Le Pendu pendit</div>
+        </div>
+    </header>
+    <!-- Section contenant la saisie du joueur et le mot à découvrir -->
+    <section class="container-fluid">
+        <div class="container jumbotron shadow pb-1 mt-4">
+            <!-- Mot à découvrir -->
+            <div class="row justify-content-center">
+                <p id="wordToSearch">
+
+                </p>
+            </div>
+            <!-- Saisie du joueur -->
+            <div class="row justify-content-center">            
+                <input type="text" name="playerText" id="playerText">
+                <input id="submitPlayerWord" type="submit">
+            </div>
+            <!-- Compteur d'erreurs -->
+            <div class="row justify-content-end">
+                <div>
+                    <p>Erreurs :
+                        <span id="errorCounter">
+                        </span>
+                        <span>
+                            /5
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Il suffit de regarder le code dans les outils de dev pour connaitre la valeur du mot à trouver -->
+
+    <script type="text/javascript">
+        /* Récupération d'une liste de mot */
+        let wordsToDiscover = ['test', 'essai', 'chance', 'cotillons'];
+
+        $('#wordToSearch').ready( () => {
+            /* On Initialise notre mot à découvrir ainsi que le cache présenté au joueur */
+
+            let randomIndex =  Math.round(Math.random() * (wordsToDiscover.length - 1));
+            let randomWord = wordsToDiscover[randomIndex];
+            let hiddenCharacter = "_ ";
+            let hiddenWord = hiddenCharacter.repeat(randomWord.length);
+            $('#wordToSearch').html(hiddenWord);
+
+            /* On transforme le mot à découvrir ainsi que le cache présenté au joueur en array 
+            * ce qui va permettre d'itérer et de modifier le cache au fur et à mesure que
+            * le joueur découvre des lettre
+            */
+            let hiddenWordArray = hiddenWord.split(' ');
+            hiddenWordArray.pop();
+            let randomWordArray = randomWord.split('');
+            
+            $('#submitPlayerWord').click( () => {
+                /* On récupère les lettres entrées par le joueur et on transfomre tout ça en array */
+                let temporaryPlayerSubmit = $('#playerText').val()
+                let tempoPlayerSubmitArray = temporaryPlayerSubmit.split('');
+
+                /* On vérifie toutes les lettres du mot à trouver avec chaque lettre saisie par le joueur
+                * si une lettre saisie correspond bien à une des lettres du mot à trouver alors
+                * le cache est modifié et découvre la lettre en question
+                */
+                   
+                   
+            
+            let oldErrorCounter = parseInt($('#errorCounter').text());
+                
+                
+
+                let errorCounter = 0;
+                let counter = 0;
+                for (const randowWordLetter of randomWordArray) {
+                    for (const tempoPlayerSubmitLetter of tempoPlayerSubmitArray) {
+                        if(randowWordLetter == tempoPlayerSubmitLetter) {
+                            hiddenWordArray[counter] = tempoPlayerSubmitLetter;
+                        }
+                    }
+                counter++;
+                }
+                for (const test of tempoPlayerSubmitArray) {
+                    if (test in randomWordArray === false)
+                    errorCounter ++;
+                    
+                }
+                
+                /* On transforme le nouveau cache en string et on remplace l'ancien par le nouveau  */
+                hiddenWord = hiddenWordArray.join(" ");
+                $('#wordToSearch').html(hiddenWord);
+                $('#errorCounter').html(errorCounter);
+
+            });
+        });
+    </script>
+</body>
+</html>

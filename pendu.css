@@ -1,0 +1,9 @@
+section {
+    height: 2000px;
+}
+
+header {
+    height: 160px;
+    background-color: #575151;
+    box-shadow: 2px solid black;
+}
